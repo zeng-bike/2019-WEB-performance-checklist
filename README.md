@@ -1,16 +1,22 @@
+```
+    原文链接地址：https://www.smashingmagazine.com/2019/01/front-end-performance-checklist-2019-pdf-pages/
+    本文译自维塔利弗里德曼的前端性能优化清单的文章--2019篇幅。
+    这是一篇有关年度前端性能检查的文章，包含了创建快速体验所需的所有知识，自2016年以来每年更新一次。
+```
+
 ## 目录
 * 规划和指标
 * 设定现实目标
 * 定义环境
 * 构建优化
-* 资产优化
+* 资源优化
 * 交互优化
 * HTTP / 2
 * 测试和监测
 * 快速取胜
 
 #### 规划和指标
-1. **建立绩效文化**
+1. **建立性能文化**
 
     只要没有业务支撑，公司的业绩就不会长期持续。 进入客户服务部门研究常见的投诉，看看如何提高业绩并且
 帮助缓解这些问题。建立一个公司定制的案例研究与实际数据和业务指标。在设计过程中计划加载顺序和权衡。
@@ -24,7 +30,7 @@ Nexus 5X 这样的中档手机和速度较慢的设备，比如 Alcatel 1X 或 N
 
     并非每一个指标都同等重要。研究什么指标最重要：通常是**最重要**的关系到你可以多快开始**渲染最重要的像素**和多快你可以**提供输入的响应能力**。根据客户的感知，优先考虑 **页面加载、时间交互、第一次输入延迟、英雄渲染时间、第一次有意义的绘制、速度指标**，通常这些指标都很重要。
 
-4. **设置 干净 和 客户 配置文件以进行测试**
+4. **设置 `clear` 和 `customer` 配置文件以进行测试**
 
     关闭杀毒和后台CPU任务，删除后台带宽传输和使用不带浏览器扩展的干净用户配置文件进行测试，以避免不正确的结果。研究客户使用的扩展，并使用专用的 **客户** 配置文件进行测试。
 
@@ -39,7 +45,7 @@ Nexus 5X 这样的中档手机和速度较慢的设备，比如 Alcatel 1X 或 N
     每一帧动画的完成时间应该少于 16ms — 理想情况下是 10ms ,从而实现 60帧/秒 ( 1秒 ÷ 60 = 16.6ms )。
     #### 保持乐观和明智地利用空闲时间。对于像动画这样的高压点，最好这样做没有什么是你能做到的，也没有什么是你不能做到的。估计输入延迟应该小于50ms。明智地利用空闲时间，用空闲的时间等待紧急的来临。
 
-2. **速度指标（SpeedIndex） < 1250，3G上的交互时间小于5s**
+2. **速度指标（SpeedIndex） < 1250，3G上的交互时间（Interaction time）小于5s**
 
     我们的目标是一次有效的渲染控制在1秒内(在快速连接上)并且保证速度指标值小于 1250ms 。考虑到我们的最好条件是一个200美元的Android手机在一个缓慢的3G的环境下，模拟 400ms [RTT](https://baike.baidu.com/item/RTT/4746617?fr=aladdin) 和 400kb 传输速度下进行仿真，我们的目标是交互时间控制在 **小于5s**，并且保证 2 - 3s 内再次访问。
 
@@ -91,7 +97,7 @@ Nexus 5X 这样的中档手机和速度较慢的设备，比如 Alcatel 1X 或 N
 
     首先最好明确的知道您在处理什么。运行所有资产的清单( `JavaScript `、图像、字体、第三方脚本、页面上的 **昂贵** 模块)，并将它们分组。定义旧版浏览器的基本核心体验（即完全可访问的核心内容），功能强大的浏览器的增强体验（即丰富的完整体验）和附加功能（不是绝对需要且可以延迟加载的资产，例如网页字体，不必要的样式，轮播脚本，视频播放器，社交媒体按钮，大图像）。不久前，我们发表了一篇关于 [改进粉碎杂志的表现](https://www.smashingmagazine.com/2014/09/improving-smashing-magazine-performance-case-study/) 的文章，详细描述了这种方法。
 
-2. **重新审视好的 切割芥末 技术**
+2. **重新审视好的 切割芥末（`cutting-the-mustard`） 技术**
 
     如今，我们仍然可以使用 [切割技术](https://www.filamentgroup.com/lab/modernizing-delivery.html) 将核心体验发送到传统浏览器，并为现代浏览器提供增强的体验。该 [技术](https://snugug.com/musings/modern-cutting-the-mustard/) 的 [更新变体](https://snugug.com/musings/modern-cutting-the-mustard/) 将使用 `ES2015+ <script type="module">`。现代浏览器会将脚本解释为 `JavaScript` 模块并按预期运行它，而旧版浏览器无法识别该属性并忽略它，因为它是未知的 `HTML` 语法。一些廉价 Android 手机主要运行 Chrome 浏览器，尽管内存和CPU功能有限，但仍将 **削减芥末** 。最终，使用 [设备内存客户端提示标题](https://github.com/w3c/device-memory) ，我们将能够更可靠地定位低端设备。在编写本文时，仅在 Blink 中支持标头（通常用于 [客户端提示](https://caniuse.com/#search=client%20hints) ）。由于设备内存还有一个 [已在 Chrome 浏览器中提供](https://developers.google.com/web/updates/2017/12/device-memory) 的 `JavaScript API`  ，因此一种选择可能是基于 `API` 进行检测，并且只有在不支持时才会回归 **切割芥末** 技术
 
@@ -99,16 +105,16 @@ Nexus 5X 这样的中档手机和速度较慢的设备，比如 Alcatel 1X 或 N
 
     在处理单页面应用程序 **SPA** 时，我们需要一些时间来初始化应用程序，然后才能呈现页面。您的设置将需要您的自定义解决方案，但您可以留意模块和技术，以加快初始渲染时间（在低端移动设备上，[解析和执行时间很容易高出2-5倍](https://medium.com/reloading/javascript-start-up-performance-69200f43b201) ）。
 
-4. **使用 `Tree-shaking`树形抖动 ，范围提升和代码分割来减少有效负载**
+4. **使用 树形抖动（`Tree-shaking`） ，作用域提升（`Scope hoisting`）和代码分割（`Code-splitting`）来减少有效负载**
 
     [树形抖动](https://developers.google.com/web/fundamentals/performance/optimizing-javascript/tree-shaking/) 是一种清理构建过程的方法，通过仅包含实际用于生产的代码并消除 [Webpack](http://2ality.com/2015/12/webpack-tree-shaking.html) 中未使用的导入。通过 Webpack 和 Rollup ，我们还提供了[范围提升](https://medium.com/webpack/brief-introduction-to-scope-hoisting-in-webpack-8435084c171f)，允许两个工具检测链接可以展平的位置，并转换为一个内联函数，而不会影响代码。通过 WebPack 使用他们。 [代码拆分](https://webpack.js.org/guides/code-splitting/) 是另一个Webpack功能，它将您的代码库拆分为按需加载的 **块**。
 
-5. **您可以将 JavaScript 卸载到 Web Worker 或 WebAssembly 中**
+5. **能否将 JavaScript 卸载到 Web Worker 中**
 
     随着代码库的不断增长，UI性能瓶颈将会出现，从而降低用户的体验。那是因为 [DOM操作](https://medium.com/google-developer-experts/running-fetch-in-a-web-worker-700dc33ac854) 与主线程上的 [JavaScript一起运行](https://medium.com/google-developer-experts/running-fetch-in-a-web-worker-700dc33ac854)。对于 [Web worker](https://flaviocopes.com/web-workers/)，我们可以将这些昂贵的操作移动到在不同线程上运行的后台进程。Web工作者的典型用例是 [预取数据和Progressive Web Apps](https://blog.sessionstack.com/how-javascript-works-the-building-blocks-of-web-workers-5-cases-when-you-should-use-them-a547c0757f6a) 以提前加载和存储一些数据，以便您以后可以在需要时使用它。可以考虑编译成
 [WebAssembly](https://webassembly.org/) 这个最适合计算密集型 Web 应用程序。
 
-6. **仅将遗留代码提供给旧版浏览器（差异服务）**
+6. **差异化服务**
 
     由于 ES2015 在 [现代浏览器](http://kangax.github.io/compat-table/es6/) 中得到了  [非常好的支持](http://kangax.github.io/compat-table/es6/)，我们可以使用 [babel-preset-env](http://2ality.com/2017/02/babel-preset-env.html) 仅转换您所针对的现代浏览器不支持的ES2015 +功能。然后设置 [两个构建](https://gist.github.com/newyankeecodeshop/79f3e1348a09583faf62ed55b58d09d9)，一个在ES6中，一个在ES5中。如上所述，现在所有 [主流浏览器](https://caniuse.com/#feat=es6-module) 都 [支持](https://caniuse.com/#feat=es6-module) JavaScript 模块，因此使用 [usescript type="module"](https://developers.google.com/web/fundamentals/primers/modules) 来让支持ES模块的浏览器加载文件，而旧浏览器可以加载旧版本 `Script nomodule`。我们可以使用 [Webpack ESNext Boilerplate](https://github.com/philipwalton/webpack-esnext-boilerplate) 自动完成整个过程。对于lodash，使用 [babel-plugin-lodash](https://github.com/lodash/babel-plugin-lodash) 它将仅加载您在源中使用的模块。您的依赖项也可能依赖于其他版本的Lodash，因此 [将通用lodash requires转换为挑选的lodash](https://www.contentful.com/blog/2017/10/27/put-your-webpack-bundle-on-a-diet-part-3/) 以避免代码重复。这可能会为您节省相当多的 JavaScript 负载。
 
@@ -140,7 +146,7 @@ Nexus 5X 这样的中档手机和速度较慢的设备，比如 Alcatel 1X 或 N
 
     仔细检查 `expires`， `cache-control`， `max-age` 和其他 HTTP 缓存标头是否已正确设置。通常，资源应该可以在[非常短的时间内（如果它们可能更改）或无限期（如果它们是静态的）](https://jakearchibald.com/2016/caching-best-practices/) 可缓存- 您只需在需要时更改 URL 中的版本。禁用 `Last-Modified` 标头，因为任何带有它的资产都会导致带有 `If-Modified-Since-header` 的条件请求，即使资源位于缓存中也是如此。与 ... 相同 Etag 。使用 `Cache-control: immutable`，专为指纹静态资源设计，以避免重新验证（截至2018年12月，[Firefox，Edge和Safari支持](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control) ；仅在 https:// 事务中支持 Firefox ）。事实上，在HTTP存档中的所有页面中， `2％` 的请求和 `30％` 的网站似乎 [包含至少1个不可变响应](https://discuss.httparchive.org/t/cache-control-immutable-a-year-later/1195)。另外，大多数使用它的网站都在具有长寿新生。而且需要注意的是，仔细检查你是不是发送不必要的报头（例如 `x-powered-by`， `pragma`， `x-ua-compatible`， `expires`和其他人）和你包括 [有用的安全和性能头](https://www.fastly.com/blog/headers-we-want) （如 `Content-Security-Policy`， `X-XSS-Protection`， `X-Content-Type-Options`等）。最后，请记住单页应用程序中 [CORS 请求](https://medium.com/@ankur_anand/the-terrible-performance-cost-of-cors-api-on-the-single-page-application-spa-6fcf71e50147) 的 [性能成本](https://medium.com/@ankur_anand/the-terrible-performance-cost-of-cors-api-on-the-single-page-application-spa-6fcf71e50147)。
 
-#### 资产优化
+#### 资源优化
 
 1. **使用 [Brotli](https://github.com/google/brotli) 或 Zopfli 进行纯文本压缩**
     
@@ -151,15 +157,15 @@ Nexus 5X 这样的中档手机和速度较慢的设备，比如 Alcatel 1X 或 N
 
     尽可能使用 [响应式图像](https://www.smashingmagazine.com/2014/05/responsive-images-done-right-guide-picture-srcset/) 与 `srcset` ， `sizes` 和 `<picture>` 元素。当然您也可以通过使用元素和 JPEG 后备（参见 Andreas Bovens 的 [代码片段](https://dev.opera.com/articles/responsive-images/#different-image-types-use-case)）或者通过提供 [WebP](https://www.smashingmagazine.com/2015/10/webp-images-and-performance/) 图像来使用 [WebP格式](https://www.smashingmagazine.com/2015/10/webp-images-and-performance/)（在 Chrome，Opera，Firefox 65，Edge 18 中支持）。使用内容协商（使用标头）。重要的是要注意，虽然WebP图像文件大小与 [等效的Guetzli和Zopfli相比](https://www.ctrl.blog/entry/webp-vs-guetzli-zopfli)，但格式 [不支持像JPEG](https://youtu.be/jTXhYj2aCDU?t=630) 这样的 [渐进式渲染](https://youtu.be/jTXhYj2aCDU?t=630)，这就是为什么用户可以通过良好的JPEG 更快地看到实际图像，尽管 [WebP](https://www.smashingmagazine.com/2015/10/webp-images-and-performance/) 图像可能会更快通过网络。使用 JPEG ，我们可以使用半数甚至四分之一的数据提供 **体面** 的用户体验，然后加载其余数据，而不是像 [WebP](https://www.smashingmagazine.com/2015/10/webp-images-and-performance/) 那样拥有半空图像。您的决定取决于您的目标：使用[WebP](https://www.smashingmagazine.com/2015/10/webp-images-and-performance/)，您将减少有效负载，使用 JPEG，您将提高感知性能。
 
-3. **图像是否正确优化**
+3. **图像是否恰当优化**
 
     当您在着陆页上工作时，特定图像的加载速度非常快，请确保 JPEG 是渐进式的，并使用 [mozJPEG](https://github.com/mozilla/mozjpeg) 进行压缩（通过操纵扫描级别来改善开始渲染时间）或 [Guetzli](https://github.com/google/guetzli)，Google浏览器的新开放式源编码器专注于感知性能，并利用 Zopfli 和 WebP 的学习。[唯一的缺点是](https://medium.com/@fox/talk-the-state-of-the-web-3e12f8e413b3)：处理时间较慢（每百万像素CPU一分钟）。对于 PNG，我们可以使用 [Pingo](http://css-ig.net/pingo)，对于 SVG，我们可以使用 [SVGO](https://www.npmjs.com/package/svgo) 或 [SVGOMG](https://jakearchibald.github.io/svgomg/)。如果您需要从网站上快速预览，复制或下载所有SVG资产，请使用 [svg-grabber](https://chrome.google.com/webstore/detail/svg-grabber-get-all-the-s/ndakggdliegnegeclmfgodmgemdokdmg) 也能为你做到这一点。您使用 [Squoosh](https://squoosh.app/) 以最佳压缩级别（有损或无损）压缩，调整大小和操作图像。如果要检查响应式标记的效率，可以使用 [映像堆](https://github.com/filamentgroup/imaging-heap)，这是一种命令行工具，可以测量视口大小和设备像素比率的效率。
     
-4. **视频是否已正确优化**
+4. **视频是否已恰当优化**
 
     坦率地说，不是加载影响渲染性能和带宽的重型动画 GIF，而是切换到动画 WebP （GIF是后备）或者用 [循环HTML5视频](https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/replace-animated-gifs-with-video/) 替换它们是个好主意。是的，浏览器性能很慢 `<video>`，并且与图像不同，浏览器不会预加载 `<video>` 内容，但它们往往比 GIF 更轻更小。不是一个选择？好吧，至少我们可以使用 [Lossy GIF](https://kornel.ski/lossygif)， [gifsicle](https://github.com/kohler/gifsicle) 或 [giflossy](https://github.com/kornelski/giflossy) 为 GIF 添加有损压缩。目前，最广泛使用和支持的编码是 H.264，由 MP4 文件提供服务，因此在提供文件之前，请确保使用 [多通道编码](https://medium.com/@borisschapira/optimize-your-mp4-video-for-better-performance-dareboost-blog-fb2f3f3dce77) 处理 MP4 ，并使用 [frei0r iirblur效果模糊](https://yalantis.com/blog/experiments-with-ffmpeg-filters-and-frei0r-plugin-effects/) （如果适用） [moov atom metadata](https://www.adobe.com/devnet/video/articles/mp4_movie_atom.html) 移动到文件头部，而服务器 [接受字节服务](https://medium.com/@borisschapira/optimize-your-mp4-video-for-better-performance-dareboost-blog-fb2f3f3dce77)。 `Boris Schapira` 为 [FFmpeg](https://medium.com/@borisschapira/optimize-your-mp4-video-for-better-performance-dareboost-blog-fb2f3f3dce77) 提供了 [最大限度优化视频的准确说明](https://medium.com/@borisschapira/optimize-your-mp4-video-for-better-performance-dareboost-blog-fb2f3f3dce77)。当然，提供WebM格式作为替代方案也会有所帮助。
 
-5. **是否优化了Web字体**
+5. **Web 字体已恰当优化**
 
     第一个值得询问的问题是，您是否可以首先使用 [UI系统字体](https://www.smashingmagazine.com/2015/11/using-system-ui-fonts-practical-guide/)。如果不是这种情况，那么您所服务的网络字体可能包括字形以及未使用的额外功能和权重。您可以要求您的类型代工厂部署 Web 字体，或者如果您使用的是开源字体，请使用 [Glyphhanger](https://www.afasterweb.com/2018/03/09/subsetting-fonts-with-glyphhanger/) 或 [Fontsquirrel](https://www.fontsquirrel.com/tools/webfont-generator) 自行对它们进行 [子集化](https://www.fontsquirrel.com/tools/webfont-generator)。你甚至可以自动化您与彼得穆勒的整个工作流程 [subfont](https://github.com/Munter/subfont#readme)，一个命令行工具，静态分析，以便生成最优化的 Web 字体的子集，然后将其注入到您的网页页面。[WOFF2支持](https://caniuse.com/#search=woff2) 很棒，你可以使用 WOFF 作为不支持它的浏览器的后备。 毕竟，传统的浏览器可能会很好地使用系统字体。有许多的Web字体加载选项，你可以选择从扎克莱特曼的战略 [一个综合指南字体](https://www.zachleat.com/web/comprehensive-webfonts/)，加载策略（也可作为代码片段的 [Web字体加载配方](https://github.com/zachleat/web-font-loading-recipes)）。一般来说，使用 `preload` 资源提示预加载字体是个好主意，但在标记中包含关键 `CSS` 和 `JavaScript` 链接后的提示。否则，字体加载将花费您在第一个渲染时间。使用 [font-displayCSS描述符](https://font-display.glitch.me/)，我们可以控制字体加载行为并使内容可以立即读取（ `font-display: optional `)或几乎立即读取( `font-display: swap` ）。
 
@@ -191,15 +197,15 @@ Nexus 5X 这样的中档手机和速度较慢的设备，比如 Alcatel 1X 或 N
 
     数据可能很昂贵，随着负载的增加，我们需要尊重那些在访问我们的网站或应用程序时选择节省数据的用户。[保存数据客户端提示请求头](https://developers.google.com/web/updates/2016/02/save-data) 允许我们定制应用程序和负载，以限制成本和性能的用户。实际上，您可以 [将对高DPI图像的请求重写为低DPI图像](https://css-tricks.com/help-users-save-data/)，删除 web 字体、奇特的视差效果、预览缩略图和无限滚动、关闭视频自动播放、服务器推送、减少显示项的数量和降低图像质量，甚至更改交付标记的方式。此外，您还可以使用 [网络信息API](https://googlechrome.github.io/samples/network-information/) 根据网络类型交付低/高分辨率的图像和视频。[网络信息API](https://googlechrome.github.io/samples/network-information/) 和特异性 `navigator.connection.effectiveType`（ 铬62+ ）使用 `RTT`，下行，网络类型值（和一些其他）来提供的连接，以及用户可以处理数据的表示。
 
-7. **预热连接以加快交付速度**
+7. **预热连接以加快传输速度**
 
     使用资源提示节省时间 [dns-prefetch](https://caniuse.com/#search=dns-prefetch)（在后台执行DNS查找），[preconnect](https://www.caniuse.com/#search=preconnect) （要求浏览器在后台启动连接握手（DNS，TCP，TLS）），[prefetch](https://caniuse.com/#search=prefetch) （要求浏览器请求资源）和 [preload](https://www.smashingmagazine.com/2016/02/preload-what-is-it-good-for/)（除了其他东西之外，它预取资源而不执行它们）。注意：如果你正在使用 `preload`，`as` 必须定义或没有加载，预加载的字体没有 `crossorigin` 属性将双倍获取。
 
-8. **使用服务工作者进行缓存和网络回退**
+8. **使用 Service workers 进行缓存和网络回退**
 
     如果您的网站是通过 HTTPS 运行的，请使用 **[实用主义者服务工作者指南](https://github.com/lyzadanger/pragmatist-service-worker)** 将静态资产缓存在服务工作者缓存中并存储脱机回退（甚至是脱机页面）并从用户的计算机中检索它们，而不是转到网络。通常，一个常见的可靠策略是将 `app shell` 与一些关键页面一起存储在服务工作者的缓存中，例如离线页面，首页以及在您的案例中可能很重要的任何其他内容。如果您正在构建一个渐进式 Web 应用程序，并且当您的服务工作者缓存从 CDN 提供的静态资产时遇到膨胀的缓存存储，请确保对于跨源资源存在正确的CORS响应头，您不会缓存不透明的响应与您的服务工作者无意中，您通过将属性添加到标记来选择跨源图像资产进入 CORS 模式。`crossorigin<img>` 使用服务工作者的一个很好的起点是 [Workbox](https://developers.google.com/web/tools/workbox/)，这是一组专门为构建渐进式 Web 应用程序而构建的服务工作者库。
 
-9. **使用 CDN / Edge 上的服务人员（例如，用于A / B测试）**
+9. **使用 CDN / Edge 上的 Service workers（例如，用于A / B测试）**
 
     此时，我们已经非常习惯在客户端上运行服务工作者，但是有了 [CDN在服务器上实现它们](https://blog.cloudflare.com/introducing-cloudflare-workers/)，我们也可以使用它们来调整边缘性能。例如，在 A / B 测试中，当 HTML 需要为不同用户改变其内容时，我们可以 [使用CDN服务器上的Service Workers](https://www.filamentgroup.com/lab/servers-workers.html) 来处理逻辑。我们还可以对 [HTML重写](https://twitter.com/patmeenan/status/1065567680298663937) 进行 [流式处理](https://twitter.com/patmeenan/status/1065567680298663937)，以加快使用Google字体的网站的速度。
 
@@ -263,7 +269,7 @@ Nexus 5X 这样的中档手机和速度较慢的设备，比如 Alcatel 1X 或 N
 
     拥有 [WebPagetest](https://www.webpagetest.org/) 的私有实例总是有利于快速和无限制的测试。但是，具有自动警报功能的连续监控工具（如 [Sitespeed](https://www.sitespeed.io/)， [Calibre](https://calibreapp.com/) 和 [SpeedCurve](https://speedcurve.com/) ）将为您提供更详细的 [性能图表](https://speedcurve.com/)。设置您自己的用户计时标记，以衡量和监控特定于业务的指标。此外，请考虑添加 [自动性能回归警报](https://calendar.perfplanet.com/2017/automating-web-performance-regression-alerts/) 以监控一段时间内的变化。研究使用 RUM 解决方案来监控性能随时间的变化。对于自动化的单元测试相似的负载测试工具，您可以将 [k6](https://github.com/loadimpact/k6) 与其脚本 API 一起使用。另外，请查看 [SpeedTracker](https://speedtracker.org/)，[Lighthouse](https://github.com/GoogleChrome/lighthouse) 和 [Calibre](https://calibreapp.com/)。
 
-#### 快速取胜
+#### 快速核查
 
 此列表非常全面，完成所有优化可能需要一段时间。那么，如果你只有1小时的时间来获得重大改进，你会做什么？让我们把它煮成12个低悬的水果。显然，在开始之前和完成之后，测量结果，包括在3G和电缆连接上开始渲染时间和速度指数。
 
