@@ -108,7 +108,7 @@ Web性能在前端领域是一个棘手的问题，所以，知道我们在性�
     
     幸运的是，有很多优秀的选项可以帮助你自动收集数据，并根据这些度量衡量你的网站在一段时间内的性能。 请记住，良好的性能度量是需要被动和主动监控工具的组合：
     - **被动监测工具，可以根据请求来模拟用户交互（综合测试，如Lighthouse，WebPageTest）**
-    - **主动监测工具，**是那些不断记录和评价用户交互行为的（**真正的用户监控**，如 **SpeedCurve**，**New Relic** —— 这两种工具也提供综合测试）
+    - **主动监测工具**，是那些不断记录和评价用户交互行为的（**真正的用户监控**，如 **SpeedCurve**，**New Relic** —— 这两种工具也提供综合测试）
     
     前者在开发过程中特别有用，因为它可以在使用产品时持续跟踪。 后者在长期维护非常有用，因为它可以帮助你了解在实际访问站点时发生的性能瓶颈。通过使用导航定时、资源定时、绘图定时、长时间任务等内置的 RUM API，被动和主动性能监视工具一起提供应用程序性能的完整画面。 例如，你可以使用 [PWMetrics](https://github.com/paulirish/pwmetrics)，[Calibre](https://calibreapp.com/)，[SpeedCurve](https://speedcurve.com/)，[mPulse](https://www.soasta.com/performance-monitoring/)，[Boomerang](https://github.com/yahoo/boomerang) 和 [Sitespeed.io](https://www.sitespeed.io/)，这些都是性能监测工具的绝佳选择。
     
